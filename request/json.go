@@ -1,4 +1,4 @@
-package blockbook
+package request
 
 import (
 	"bytes"
