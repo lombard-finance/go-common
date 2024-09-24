@@ -1,10 +1,11 @@
-package request
+package common
 
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/pkg/errors"
 	"io"
+
+	"github.com/pkg/errors"
 )
 
 func DecodeJSONResponse[T any](body io.Reader) (T, error) {
