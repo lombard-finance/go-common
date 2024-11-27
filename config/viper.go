@@ -3,11 +3,12 @@ package config
 import (
 	"bytes"
 	"encoding/gob"
-	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/viper"
 )
@@ -72,6 +73,13 @@ func ViperGetOrDefaultUint64(v *viper.Viper, key string, defaultValue uint64) ui
 		return defaultValue
 	}
 	return v.GetUint64(key)
+}
+
+func ViperGetOrDefaultInt64(v *viper.Viper, key string, defaultValue int64) int64 {
+	if v := v.Get(key); v == nil {
+		return defaultValue
+	}
+	return v.GetInt64(key)
 }
 
 func ViperGetOrDefaultUint32(v *viper.Viper, key string, defaultValue uint32) uint32 {
