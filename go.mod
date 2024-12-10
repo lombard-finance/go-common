@@ -8,16 +8,10 @@ require (
 	github.com/spf13/viper v1.19.0
 )
 
-require (
-	github.com/holiman/uint256 v1.3.1 // indirect
-	golang.org/x/crypto v0.23.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-)
+require gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 
 require (
-	github.com/ethereum/go-ethereum v1.14.5
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/google/uuid v1.6.0
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jpillora/longestcommon v0.0.0-20161227235612-adb9d91ee629
 	github.com/magiconair/properties v1.8.7 // indirect
