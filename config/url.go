@@ -15,10 +15,9 @@ func NormalizeURL(address string) (*url.URL, error) {
 		return nil, err
 	}
 
-	// If no scheme is specified, default to https
-	if u.Scheme == "" {
-		u.Scheme = "https"
-	} else {
+	// Default to https
+	u.Scheme = "https"
+	if u.Scheme != "" {
 		// Force https if http was specified
 		u.Scheme = "https"
 	}
