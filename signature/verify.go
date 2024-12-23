@@ -8,28 +8,18 @@ import (
 	"strconv"
 )
 
-func VerifySignature(signer, sign, message string) error {
-	signerBytes, err := DecodeHex(signer)
-	if err != nil {
-		return errors.Wrap(err, "decode signer")
-	}
-
-	signature, err := DecodeHex(sign)
-	if err != nil {
-		return errors.Wrap(err, "decode signature")
-	}
-
+func VerifySignature(signer, signature []byte, message string) error {
 	address, err := verifyMessage(message, signature)
 	if err != nil {
 		return errors.Wrap(err, "verify message")
 	}
 
-	if len(address) != len(signerBytes) {
-		return errors.Errorf("invalid signer length. expected %d. actual %d.", len(address), len(signerBytes))
+	if len(address) != len(signer) {
+		return errors.Errorf("invalid signer length. expected %d. actual %d.", len(address), len(signer))
 	}
 
-	if !bytes.Equal(address, signerBytes) {
-		return errors.Errorf("wrong signer (%x != %x)", address, signerBytes)
+	if !bytes.Equal(address, signer) {
+		return errors.Errorf("wrong signer (expected %x != actual %x)", address, signer)
 	}
 
 	return nil
