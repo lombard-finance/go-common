@@ -3,11 +3,12 @@ package config
 import (
 	"bytes"
 	"encoding/gob"
-	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/viper"
 )
