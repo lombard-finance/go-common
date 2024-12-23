@@ -3,12 +3,18 @@ module github.com/lombard-finance/go-common
 go 1.22
 
 require (
+	github.com/ethereum/go-ethereum v1.14.12
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
 )
 
-require gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+require (
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
+	github.com/holiman/uint256 v1.3.1 // indirect
+	golang.org/x/crypto v0.22.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+)
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
