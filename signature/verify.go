@@ -8,20 +8,21 @@ import (
 	"strconv"
 )
 
+var ErrEmptySigner = errors.New("empty signer")
+
 func VerifySignature(signer, signature []byte, message string) error {
+	if len(signer) == 0 {
+		return ErrEmptySigner
+	}
+
 	address, err := recoverSignerAddress(message, signature)
 	if err != nil {
 		return errors.Wrap(err, "verify message")
 	}
 
-	if len(address) != len(signer) {
-		return errors.Errorf("invalid signer length. expected %d. actual %d.", len(address), len(signer))
-	}
-
 	if !bytes.Equal(address, signer) {
 		return errors.Errorf("wrong signer (expected %x != actual %x)", address, signer)
 	}
-
 	return nil
 }
 
