@@ -39,7 +39,7 @@ type TypedData struct {
 	Message     Message `json:"message"`
 }
 
-func ExtractTypedDataValues(typedDataStr string) (expiryTime time.Time, feeApproved uint64, chainId uint64, err error) {
+func ExtractTypedDataValues(typedDataStr string) (time.Time, uint64, uint64, error) {
 	var data TypedData
 	if err := json.Unmarshal([]byte(typedDataStr), &data); err != nil {
 		return time.Time{}, 0, 0, err
@@ -48,10 +48,7 @@ func ExtractTypedDataValues(typedDataStr string) (expiryTime time.Time, feeAppro
 	if data.Message.Fee.Cmp(uint256.NewInt(0)) == 0 {
 		return time.Time{}, 0, 0, ErrZeroMaxMintFee
 	}
-
-	expiryTime = time.Unix(data.Message.Expiry, 0)
-	chainId = data.Message.ChainId
-	return expiryTime, feeApproved, chainId, nil
+	return time.Unix(data.Message.Expiry, 0), data.Message.Fee.Uint64(), data.Message.ChainId, nil
 }
 
 func VerifyEIP712Signature(signerHex, signatureHex, typedDataMarshaled string) error {

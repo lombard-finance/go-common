@@ -9,7 +9,7 @@ import (
 )
 
 func VerifySignature(signer, signature []byte, message string) error {
-	address, err := verifyMessage(message, signature)
+	address, err := recoverSignerAddress(message, signature)
 	if err != nil {
 		return errors.Wrap(err, "verify message")
 	}
@@ -25,7 +25,7 @@ func VerifySignature(signer, signature []byte, message string) error {
 	return nil
 }
 
-func verifyMessage(message string, signedMessage []byte) ([]byte, error) {
+func recoverSignerAddress(message string, signedMessage []byte) ([]byte, error) {
 	if len(signedMessage) != 65 {
 		return nil, errors.Errorf("wrong signature length (%d != 65)", len(signedMessage))
 	}

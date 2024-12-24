@@ -44,11 +44,19 @@ func TestVerifyEIPSignature(t *testing.T) {
 		}
 		data, err := json.Marshal(&typeData)
 		assert.NoError(t, err)
-
 		assert.Error(t, VerifyEIP712Signature(signer, validSign, string(data)))
 	})
 
 	t.Run("invalid signature", func(t *testing.T) {
 		assert.Error(t, VerifyEIP712Signature(signer, invalidSign, string(validMsg)))
+	})
+
+	t.Run("extract data from message", func(t *testing.T) {
+		expiry, fee, chainId, err := ExtractTypedDataValues(string(validMsg))
+		assert.NoError(t, err)
+		assert.Equal(t, expiry.Unix(), typeData.Message.Expiry)
+		assert.Equal(t, fee, typeData.Message.Fee.Uint64())
+		assert.Equal(t, chainId, typeData.Message.ChainId)
+
 	})
 }
