@@ -2,10 +2,11 @@ package signature
 
 import (
 	"bytes"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/pkg/errors"
 	"math/big"
 	"strconv"
+
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/pkg/errors"
 )
 
 var ErrEmptySigner = errors.New("empty signer")
@@ -27,8 +28,8 @@ func VerifySignature(signer, signature []byte, message string) error {
 }
 
 func recoverSignerAddress(message string, signedMessage []byte) ([]byte, error) {
-	if len(signedMessage) != 65 {
-		return nil, errors.Errorf("wrong signature length (%d != 65)", len(signedMessage))
+	if len(signedMessage) != EvmEcdsaSignatureLength {
+		return nil, errors.Errorf("wrong signature length (%d != %d)", len(signedMessage), EvmEcdsaSignatureLength)
 	}
 
 	// Hash the unsigned message using EIP-191
