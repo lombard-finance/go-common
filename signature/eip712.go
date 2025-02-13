@@ -3,14 +3,18 @@ package signature
 import (
 	"encoding/json"
 	"errors"
+	"time"
+
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/signer/core/apitypes"
 	"github.com/holiman/uint256"
 	"github.com/storyicon/sigverify"
-	"time"
 )
 
-var ErrZeroMaxMintFee = errors.New("mint fee cannot be 0")
+var (
+	ErrZeroMaxMintFee = errors.New("mint fee cannot be 0")
+	ErrMissingFee     = errors.New("fee field is required")
+)
 
 type Domain struct {
 	Name              string `json:"name"`
@@ -43,6 +47,10 @@ func ExtractTypedDataValues(typedDataStr string) (time.Time, uint64, uint64, err
 	var data TypedData
 	if err := json.Unmarshal([]byte(typedDataStr), &data); err != nil {
 		return time.Time{}, 0, 0, err
+	}
+
+	if data.Message.Fee == nil {
+		return time.Time{}, 0, 0, ErrMissingFee
 	}
 
 	if data.Message.Fee.Cmp(uint256.NewInt(0)) == 0 {
