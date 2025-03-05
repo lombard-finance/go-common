@@ -15,4 +15,7 @@ const (
 
 	// All valid SUI signatures in base64 are 132 characters
 	SuiSignatureLengthBase64 = 132
+
+	// All valid Solana signatures in base58 are 88 characters
+	SolanaSignatureLengthBase58 = 88
 )
