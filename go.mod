@@ -13,9 +13,8 @@ require (
 	github.com/spf13/viper v1.19.0
 	github.com/storyicon/sigverify v1.1.0
 	github.com/stretchr/testify v1.9.0
+	go.uber.org/zap v1.21.0
 )
-
-require go.uber.org/zap v1.21.0
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
