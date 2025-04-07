@@ -4,6 +4,8 @@ import (
 	"encoding/hex"
 	"strings"
 
+	"regexp"
+
 	"github.com/mr-tron/base58"
 )
 
@@ -13,9 +15,21 @@ const (
 	SolanaAddressLength = 32 // 32 bytes for Solana addresses
 )
 
-// IsValidBlockchainAddress verifies whether a string can represent a valid
+// hexPattern matches valid hexadecimal strings with optional 0x prefix
+var hexPattern = regexp.MustCompile(`^(?:0x)?[0-9a-fA-F]+$`)
+
+// NormalizeAddress normalizes addresses by lowercasing hex addresses
+// and leaving other formats (like Base58) unchanged.
+func NormalizeAddress(address string) string {
+	if hexPattern.MatchString(address) {
+		return strings.ToLower(address)
+	}
+	return address
+}
+
+// IsValidDestinationBlockchainAddress verifies whether a string can represent a valid
 // EVM, SUI or Solana address.
-func IsValidBlockchainAddress(s string) bool {
+func IsValidDestinationBlockchainAddress(s string) bool {
 	// Check if it could be a Solana address (no 0x prefix)
 	if !strings.HasPrefix(strings.ToLower(s), "0x") {
 		if res, err := base58.Decode(s); err == nil {
