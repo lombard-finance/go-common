@@ -10,9 +10,10 @@ import (
 )
 
 const (
-	EVMAddressLength    = 20 // 20 bytes for EVM addresses
-	SUIAddressLength    = 32 // 32 bytes for SUI addresses
-	SolanaAddressLength = 32 // 32 bytes for Solana addresses
+	EVMAddressLength      = 20 // 20 bytes for EVM addresses
+	SUIAddressLength      = 32 // 32 bytes for SUI addresses
+	SolanaAddressLength   = 32 // 32 bytes for Solana addresses
+	StarknetAddressLength = 32 // 32 bytes for Starknet addresses (252-bit field elements padded to 32 bytes; most significant nibble is always 0)
 )
 
 // hexPattern matches valid hexadecimal strings with optional 0x prefix
@@ -41,7 +42,9 @@ func IsValidDestinationBlockchainAddress(s string) bool {
 	s = strings.TrimPrefix(strings.TrimPrefix(s, "0x"), "0X")
 
 	if res, err := hex.DecodeString(s); err == nil {
-		return len(res) == EVMAddressLength || len(res) == SUIAddressLength
+		return len(res) == EVMAddressLength ||
+			len(res) == SUIAddressLength ||
+			len(res) == StarknetAddressLength
 	}
 
 	return false
