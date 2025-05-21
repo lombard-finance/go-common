@@ -2,32 +2,47 @@ package address
 
 import (
 	"encoding/hex"
-	"fmt"
 	"strings"
+
+	"regexp"
+
+	"github.com/mr-tron/base58"
 )
 
 const (
-	EVMAddressLength = 40 // 40 hex chars for EVM addresses
-	SUIAddressLength = 64 // 64 hex chars for SUI addresses
+	EVMAddressLength    = 20 // 20 bytes for EVM addresses
+	SUIAddressLength    = 32 // 32 bytes for SUI addresses
+	SolanaAddressLength = 32 // 32 bytes for Solana addresses
 )
 
-// IsValidBlockchainAddress verifies whether a string can represent a valid hex-encoded
-// EVM or SUI address.
-func IsValidBlockchainAddress(s string) (bool, string) {
+// hexPattern matches valid hexadecimal strings with optional 0x prefix
+var hexPattern = regexp.MustCompile(`^(?:0x)?[0-9a-fA-F]+$`)
+
+// NormalizeAddress normalizes addresses by lowercasing hex addresses
+// and leaving other formats (like Base58) unchanged.
+func NormalizeAddress(address string) string {
+	if hexPattern.MatchString(address) {
+		return strings.ToLower(address)
+	}
+	return address
+}
+
+// IsValidDestinationBlockchainAddress verifies whether a string can represent a valid
+// EVM, SUI or Solana address.
+func IsValidDestinationBlockchainAddress(s string) bool {
+	// Check if it could be a Solana address (no 0x prefix)
+	if !strings.HasPrefix(strings.ToLower(s), "0x") {
+		if res, err := base58.Decode(s); err == nil {
+			return len(res) == SolanaAddressLength
+		}
+	}
+
+	// Handle as potential EVM or SUI address
 	s = strings.TrimPrefix(strings.TrimPrefix(s, "0x"), "0X")
 
-	if _, err := hex.DecodeString(s); err != nil {
-		return false, "not a hex string"
+	if res, err := hex.DecodeString(s); err == nil {
+		return len(res) == EVMAddressLength || len(res) == SUIAddressLength
 	}
 
-	// Check for valid lengths
-	switch len(s) {
-	case EVMAddressLength:
-		return true, "evm"
-	case SUIAddressLength:
-		return true, "sui"
-	default:
-		return false, fmt.Sprintf("invalid address length: got %d hex chars, expected %d (EVM) or %d (SUI)",
-			len(s), EVMAddressLength, SUIAddressLength)
-	}
+	return false
 }
