@@ -82,6 +82,20 @@ func ViperGetOrDefaultUint32(v *viper.Viper, key string, defaultValue uint32) ui
 	return v.GetUint32(key)
 }
 
+func ViperGetOrDefaultInt64(v *viper.Viper, key string, defaultValue int64) int64 {
+	if v := v.Get(key); v == nil {
+		return defaultValue
+	}
+	return v.GetInt64(key)
+}
+
+func ViperGetOrDefaultInt32(v *viper.Viper, key string, defaultValue int32) int32 {
+	if v := v.Get(key); v == nil {
+		return defaultValue
+	}
+	return v.GetInt32(key)
+}
+
 func ViperGetOrDefaultFloat64(v *viper.Viper, key string, defaultValue float64) float64 {
 	if v := v.Get(key); v == nil {
 		return defaultValue
